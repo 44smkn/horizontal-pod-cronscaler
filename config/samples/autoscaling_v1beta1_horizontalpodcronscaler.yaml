@@ -1,0 +1,7 @@
+apiVersion: autoscaling.44smkn.github.io/v1beta1
+kind: HorizontalPodCronscaler
+metadata:
+  name: horizontalpodcronscaler-sample
+spec:
+  # Add fields here
+  foo: bar

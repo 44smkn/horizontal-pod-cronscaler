@@ -1,0 +1,16 @@
+domain: 44smkn.github.io
+layout:
+- go.kubebuilder.io/v3
+projectName: horizontal-pod-cronscaler
+repo: github.com/44smkn/horizontal-pod-cronscaler
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: 44smkn.github.io
+  group: autoscaling
+  kind: HorizontalPodCronscaler
+  path: github.com/44smkn/horizontal-pod-cronscaler/api/v1beta1
+  version: v1beta1
+version: "3"

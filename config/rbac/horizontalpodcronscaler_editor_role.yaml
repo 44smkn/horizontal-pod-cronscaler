@@ -1,0 +1,24 @@
+# permissions for end users to edit horizontalpodcronscalers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: horizontalpodcronscaler-editor-role
+rules:
+- apiGroups:
+  - autoscaling.44smkn.github.io
+  resources:
+  - horizontalpodcronscalers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - autoscaling.44smkn.github.io
+  resources:
+  - horizontalpodcronscalers/status
+  verbs:
+  - get
