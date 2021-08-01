@@ -1,0 +1,93 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: horizontalpodcronscalers.autoscaling.44smkn.github.io
+spec:
+  group: autoscaling.44smkn.github.io
+  names:
+    kind: HorizontalPodCronscaler
+    listKind: HorizontalPodCronscalerList
+    plural: horizontalpodcronscalers
+    singular: horizontalpodcronscaler
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: HorizontalPodCronscaler is the Schema for the horizontalpodcronscalers
+          API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              replicas:
+                description: MinReplicas ...
+                format: int32
+                type: integer
+              scaleTargetRef:
+                description: ScaleTargetRef
+                properties:
+                  apiVersion:
+                    description: API version of the referent
+                    type: string
+                  kind:
+                    description: 'Kind of the referent; More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"'
+                    type: string
+                  name:
+                    description: 'Name of the referent; More info: http://kubernetes.io/docs/user-guide/identifiers#names'
+                    type: string
+                required:
+                - kind
+                - name
+                type: object
+              schedule:
+                description: Schedule
+                type: string
+            required:
+            - replicas
+            - scaleTargetRef
+            - schedule
+            type: object
+          status:
+            description: HorizontalPodCronscalerStatus defines the observed state
+              of HorizontalPodCronscaler
+            properties:
+              lastSchedule:
+                description: LastSchedule ...
+                format: date-time
+                type: string
+              lastTargetReplicas:
+                description: LastTargetTeplicas ...
+                format: int32
+                type: integer
+            required:
+            - lastSchedule
+            - lastTargetReplicas
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

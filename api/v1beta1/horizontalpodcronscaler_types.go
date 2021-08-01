@@ -17,25 +17,44 @@ limitations under the License.
 package v1beta1
 
 import (
+	autoscalingv2beta2 "k8s.io/api/autoscaling/v2beta2"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
-// HorizontalPodCronscalerSpec defines the desired state of HorizontalPodCronscaler
 type HorizontalPodCronscalerSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// ScaleTargetRef
+	ScaleTargetRef autoscalingv2beta2.CrossVersionObjectReference `json:"scaleTargetRef"`
 
-	// Foo is an example field of HorizontalPodCronscaler. Edit horizontalpodcronscaler_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// MinReplicas ...
+	Replicas int32 `json:"replicas"`
+
+	// Schedule
+	Schedule string `json:"schedule"`
+}
+
+// ObjectMeta is metadata of objects.
+// This is partially copied from metav1.ObjectMeta.
+type ObjectMeta struct {
+	// Name is the name of the object.
+	// +optional
+	Name string `json:"name,omitempty"`
+
+	// Labels is a map of string keys and values.
+	// +optional
+	Labels map[string]string `json:"labels,omitempty"`
+
+	// Annotations is a map of string keys and values.
+	// +optional
+	Annotations map[string]string `json:"annotations,omitempty"`
 }
 
 // HorizontalPodCronscalerStatus defines the observed state of HorizontalPodCronscaler
 type HorizontalPodCronscalerStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	// LastTargetTeplicas ...
+	LastTargetReplicas *int32 `json:"lastTargetReplicas"`
+
+	// LastSchedule ...
+	LastSchedule metav1.Time `json:"lastSchedule"`
 }
 
 //+kubebuilder:object:root=true

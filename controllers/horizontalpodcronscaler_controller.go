@@ -22,9 +22,10 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/log"
+	crlog "sigs.k8s.io/controller-runtime/pkg/log"
 
 	autoscalingv1beta1 "github.com/44smkn/horizontal-pod-cronscaler/api/v1beta1"
+	"github.com/44smkn/horizontal-pod-cronscaler/pkg/scaling"
 )
 
 // HorizontalPodCronscalerReconciler reconciles a HorizontalPodCronscaler object
@@ -36,20 +37,25 @@ type HorizontalPodCronscalerReconciler struct {
 //+kubebuilder:rbac:groups=autoscaling.44smkn.github.io,resources=horizontalpodcronscalers,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=autoscaling.44smkn.github.io,resources=horizontalpodcronscalers/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=autoscaling.44smkn.github.io,resources=horizontalpodcronscalers/finalizers,verbs=update
+//+kubebuilder:rbac:groups=apps,resources=deployments;replicaset,verbs=get;list;watch;update;patch
 
-// Reconcile is part of the main kubernetes reconciliation loop which aims to
-// move the current state of the cluster closer to the desired state.
-// TODO(user): Modify the Reconcile function to compare the state specified by
-// the HorizontalPodCronscaler object against the actual cluster state, and then
-// perform operations to make the cluster state reflect the state specified by
-// the user.
-//
-// For more details, check Reconcile and its Result here:
-// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.8.3/pkg/reconcile
 func (r *HorizontalPodCronscalerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	log := crlog.FromContext(ctx)
 
-	// your logic here
+	hpc := &autoscalingv1beta1.HorizontalPodCronscaler{}
+	if err := r.Get(ctx, req.NamespacedName, hpc); err != nil {
+		log.Error(err, "unable to fetch HorizontalPodCronscaler")
+		return ctrl.Result{}, err
+	}
+
+	if !hpc.DeletionTimestamp.IsZero() {
+		scaling.RemoveSchedule(req.NamespacedName.String())
+		log.Info("remove schedule")
+		return ctrl.Result{}, nil
+	}
+
+	scaling.AddSchedule(ctx, hpc, r.Client, log)
+	log.Info("added schedule", "schedule", hpc.Spec.Schedule)
 
 	return ctrl.Result{}, nil
 }
