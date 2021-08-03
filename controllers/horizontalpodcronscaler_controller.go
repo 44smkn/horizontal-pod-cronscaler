@@ -26,6 +26,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/utils/pointer"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -81,9 +82,10 @@ func (r *HorizontalPodCronscalerReconciler) Reconcile(ctx context.Context, req c
 			log.Info(fmt.Sprintf("scale %s replicas to %v", name, hpc.Spec.Replicas))
 
 			patch := &unstructured.Unstructured{}
-			patch.SetGroupVersionKind(hpc.GroupVersionKind())
+			gvk := schema.FromAPIVersionAndKind(hpc.Spec.ScaleTargetRef.APIVersion, hpc.Spec.ScaleTargetRef.Kind)
+			patch.SetGroupVersionKind(gvk)
 			patch.SetNamespace(hpc.Namespace)
-			patch.SetName(hpc.Name)
+			patch.SetName(hpc.Spec.ScaleTargetRef.Name)
 
 			patch.UnstructuredContent()["spec"] = map[string]interface{}{
 				"replicas": hpc.Spec.Replicas,
@@ -120,8 +122,8 @@ type Schedule struct {
 	shouldDelete   bool
 }
 
-func (r *HorizontalPodCronscalerReconciler) putSchedule(ch <-chan *Schedule, log logr.Logger) {
-	for p := range ch {
+func (r *HorizontalPodCronscalerReconciler) putSchedule(log logr.Logger) {
+	for p := range r.ch {
 		if id, ok := r.cronMapping[p.name]; ok {
 			r.cron.Remove(id)
 		}
@@ -137,7 +139,7 @@ func (r *HorizontalPodCronscalerReconciler) putSchedule(ch <-chan *Schedule, log
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *HorizontalPodCronscalerReconciler) SetupWithManager(mgr ctrl.Manager) error {
-	go r.putSchedule(r.ch, crlog.Log)
+	go r.putSchedule(crlog.Log)
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&autoscalingv1beta1.HorizontalPodCronscaler{}).
 		Complete(r)
