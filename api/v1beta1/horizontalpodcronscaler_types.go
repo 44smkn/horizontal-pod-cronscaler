@@ -59,6 +59,10 @@ type HorizontalPodCronscalerStatus struct {
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+//+kubebuilder:printcolumn:name="RefKind",type="string",JSONPath=".spec.scaleTargetRef.kind"
+//+kubebuilder:printcolumn:name="RefName",type="string",JSONPath=".spec.scaleTargetRef.name"
+//+kubebuilder:printcolumn:name="Schedule",type="string",JSONPath=".spec.schedule"
+//+kubebuilder:printcolumn:name="Replicas",type="integer",JSONPath=".spec.replicas"
 
 // HorizontalPodCronscaler is the Schema for the horizontalpodcronscalers API
 type HorizontalPodCronscaler struct {

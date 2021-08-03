@@ -16,7 +16,20 @@ spec:
     singular: horizontalpodcronscaler
   scope: Namespaced
   versions:
-  - name: v1beta1
+  - additionalPrinterColumns:
+    - jsonPath: .spec.scaleTargetRef.kind
+      name: RefKind
+      type: string
+    - jsonPath: .spec.scaleTargetRef.name
+      name: RefName
+      type: string
+    - jsonPath: .spec.schedule
+      name: Schedule
+      type: string
+    - jsonPath: .spec.replicas
+      name: Replicas
+      type: integer
+    name: v1beta1
     schema:
       openAPIV3Schema:
         description: HorizontalPodCronscaler is the Schema for the horizontalpodcronscalers
