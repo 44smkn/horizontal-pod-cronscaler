@@ -18,10 +18,10 @@ spec:
   versions:
   - additionalPrinterColumns:
     - jsonPath: .spec.scaleTargetRef.kind
-      name: RefKind
+      name: Ref Kind
       type: string
     - jsonPath: .spec.scaleTargetRef.name
-      name: RefName
+      name: Ref Name
       type: string
     - jsonPath: .spec.schedule
       name: Schedule
@@ -30,7 +30,7 @@ spec:
       name: Replicas
       type: integer
     - jsonPath: .status.lastSchedule
-      name: LastSchedule
+      name: Last Schedule
       type: date
     name: v1beta1
     schema:
