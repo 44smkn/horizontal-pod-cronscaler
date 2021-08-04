@@ -29,6 +29,9 @@ spec:
     - jsonPath: .spec.replicas
       name: Replicas
       type: integer
+    - jsonPath: .status.lastSchedule
+      name: LastSchedule
+      type: date
     name: v1beta1
     schema:
       openAPIV3Schema:

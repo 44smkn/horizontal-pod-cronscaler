@@ -103,9 +103,7 @@ func (r *HorizontalPodCronscalerReconciler) Reconcile(ctx context.Context, req c
 				LastSchedule:       metav1.NewTime(time.Now()),
 			}
 
-			if err != nil {
-				log.Error(err, "failed to addFunc")
-			}
+			r.Status().Update(ctx, hpc)
 		},
 	}
 	log.Info("before send message to channel")
