@@ -82,6 +82,10 @@ func main() {
 		setupLog.Error(err, "unable to create controller", "controller", "HorizontalPodCronscaler")
 		os.Exit(1)
 	}
+	if err = (&autoscalingv1beta1.HorizontalPodCronscaler{}).SetupWebhookWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create webhook", "webhook", "HorizontalPodCronscaler")
+		os.Exit(1)
+	}
 	//+kubebuilder:scaffold:builder
 
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {

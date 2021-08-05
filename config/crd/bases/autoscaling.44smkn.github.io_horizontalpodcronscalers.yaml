@@ -17,11 +17,8 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .spec.scaleTargetRef.kind
-      name: Ref Kind
-      type: string
-    - jsonPath: .spec.scaleTargetRef.name
-      name: Ref Name
+    - jsonPath: .spec.reference
+      name: Reference
       type: string
     - jsonPath: .spec.schedule
       name: Schedule
@@ -52,6 +49,9 @@ spec:
             type: object
           spec:
             properties:
+              reference:
+                description: Reference ...
+                type: string
               replicas:
                 description: MinReplicas ...
                 format: int32

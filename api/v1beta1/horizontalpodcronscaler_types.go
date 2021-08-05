@@ -25,6 +25,9 @@ type HorizontalPodCronscalerSpec struct {
 	// ScaleTargetRef
 	ScaleTargetRef autoscalingv2beta2.CrossVersionObjectReference `json:"scaleTargetRef"`
 
+	// Reference ...
+	Reference string `json:"reference,omitempty"`
+
 	// MinReplicas ...
 	Replicas int32 `json:"replicas"`
 
@@ -59,8 +62,7 @@ type HorizontalPodCronscalerStatus struct {
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
-//+kubebuilder:printcolumn:name="Ref Kind",type="string",JSONPath=".spec.scaleTargetRef.kind"
-//+kubebuilder:printcolumn:name="Ref Name",type="string",JSONPath=".spec.scaleTargetRef.name"
+//+kubebuilder:printcolumn:name="Reference",type="string",JSONPath=".spec.reference"
 //+kubebuilder:printcolumn:name="Schedule",type="string",JSONPath=".spec.schedule"
 //+kubebuilder:printcolumn:name="Replicas",type="integer",JSONPath=".spec.replicas"
 //+kubebuilder:printcolumn:name="Last Schedule",type="date",JSONPath=".status.lastSchedule"

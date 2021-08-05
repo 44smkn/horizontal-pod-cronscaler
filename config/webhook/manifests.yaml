@@ -1,0 +1,58 @@
+
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  creationTimestamp: null
+  name: mutating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  - v1beta1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: system
+      path: /mutate-autoscaling-44smkn-github-io-v1beta1-horizontalpodcronscaler
+  failurePolicy: Fail
+  name: mhorizontalpodcronscaler.kb.io
+  rules:
+  - apiGroups:
+    - autoscaling.44smkn.github.io
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - horizontalpodcronscalers
+  sideEffects: None
+
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  creationTimestamp: null
+  name: validating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  - v1beta1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: system
+      path: /validate-autoscaling-44smkn-github-io-v1beta1-horizontalpodcronscaler
+  failurePolicy: Fail
+  name: vhorizontalpodcronscaler.kb.io
+  rules:
+  - apiGroups:
+    - autoscaling.44smkn.github.io
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - horizontalpodcronscalers
+  sideEffects: None
